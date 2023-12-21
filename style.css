@@ -83,7 +83,7 @@ html,body{
 .blocktext h5{
     text-transform: uppercase;
     font-size: 15px;
-    text-align: right;
+    text-align: right  !important;
 }
 
 #chhotiheadings{
@@ -162,11 +162,12 @@ html,body{
     border-bottom: 1px solid #888;
 }
 .elem img{
-    display: none;
-   /* opacity: 0;*/
+    opacity: 0;
+    pointer-events: none;
     height: 140%;
     z-index: 999;
     position: absolute;
+    transform: translate(-50%, -50%);
 }
 
 #about{

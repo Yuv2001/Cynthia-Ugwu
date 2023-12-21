@@ -1,5 +1,5 @@
 const scroll = new LocomotiveScroll({
-    el: document.querySelector('#main'),
+    el: document.querySelector("#main"),
     smooth: true
 });
 
@@ -38,22 +38,56 @@ function circleskewkaro(){
     var yprev = 0;
 
     window.addEventListener("mousemove",function(dets){
-         var xdiff = dets.clientX - xprev;
-         var ydiff = dets.clienty - yprev;
+         
+         xscale= gsap.utils.clamp(.7,1.1,dets.clientX - xprev);
+         yscale= gsap.utils.clamp(.7,1.1,dets.clientY - yprev);
 
          xprev = dets.clientX;
-         yprev = dets.clienty;
+         yprev = dets.clientY;
 
-         console.log(xdiff, ydiff);
+         circleMouseFowller(xscale,yscale);
 
     });
 }
-circleskewkaro();
 
-function circleMouseFowller(){
+function circleMouseFowller(xscale,yscale){
     window.addEventListener("mousemove",function (dets) {
-        document.querySelector("#minicircle").style.transform =`translate(${dets.clientX}px,${dets.clientY}px)`;
-    })
+        document.querySelector("#minicircle").style.transform =`translate(${dets.clientX}px,${dets.clientY}px) scale(${xscale}, ${yscale})`;
+    });
 }
+
+circleskewkaro();
 circleMouseFowller();
 firstPageAnim();
+//teeno element ko select karo, uske baad teeno par ek mousemove lagao,
+// jab mousemove ho to ye pata karo ki mouse kaha par hai , 
+//jiska matlab hai mouse ki x y position ke badle us image ko show karo and us image ko move karo, 
+//move karte waqt rotate karo, and jaise jaise mouse tez chale waise rotation bhi tez ho jaye 
+
+
+document.querySelectorAll(".elem").forEach(function (elem) {
+    var rotate = 0;
+    var diffrot = 0;
+
+    elem.addEventListener("mouseleave", function(dets) {
+       
+        gsap.to(elem.querySelector("img"), {
+            opacity:0,
+            ease: Power3,
+            duration: 0.9,
+        });
+    });
+
+    elem.addEventListener("mousemove", function(dets) {
+        var diff = dets.clientY - elem.getBoundingClientRect().top;
+        diffrot = dets.clientX - rotate;
+        rotate = dets.clientX;
+        gsap.to(elem.querySelector("img"), {
+            opacity:1,
+            ease: Power3,
+            top:diff,
+            left:dets.clientX,
+            rotate: gsap.utils.clamp(-20,20,diffrot*0.4)
+        });
+    });
+});
